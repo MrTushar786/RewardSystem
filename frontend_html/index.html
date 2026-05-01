@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reward System - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --bg-gradient: linear-gradient(135deg, #1e1e2f 0%, #2a2a40 100%);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text-color: #f3f4f6;
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Background decorative circles */
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .shape1 {
+      width: 300px;
+      height: 300px;
+      background: #4F46E5;
+      top: -50px;
+      left: -50px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .shape2 {
+      width: 400px;
+      height: 400px;
+      background: #EC4899;
+      bottom: -100px;
+      right: -100px;
+      animation: float 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+
+      50% {
+        transform: translateY(-20px) scale(1.05);
+      }
+    }
+
+    .login-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      padding: 40px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 600;
+      text-align: center;
+      background: linear-gradient(to right, #fff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    input::placeholder {
+      color: #6b7280;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      text-align: center;
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Decorative Background Shapes -->
+  <div class="bg-shape shape1"></div>
+  <div class="bg-shape shape2"></div>
+
+  <div class="login-container">
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Enter your name to access your rewards dashboard</p>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="input-group">
+      <input type="text" id="name" placeholder="E.g., Ranvir Kumar" autocomplete="off">
+    </div>
+
+    <button id="loginBtn" onclick="login()">
+      <span id="btnText">Login to Dashboard</span>
+      <div class="spinner" id="btnSpinner"></div>
+    </button>
+  </div>
+
+  <script>
+    const API = "http://localhost:5000/api/users";
+
+    async function login() {
+      const nameInput = document.getElementById("name").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+      const btn = document.getElementById("loginBtn");
+      const btnText = document.getElementById("btnText");
+      const btnSpinner = document.getElementById("btnSpinner");
+
+      // Reset error state
+      errorMsg.style.display = "none";
+
+      if (!nameInput) {
+        showError("Please enter your name.");
+        return;
+      }
+
+      // Loading state
+      btn.classList.add("loading");
+      btnText.style.display = "none";
+      btnSpinner.style.display = "block";
+
+      try {
+        const response = await fetch(API + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: nameInput })
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to connect to the server.");
+        }
+
+        const data = await response.json();
+
+        if (!data) {
+          showError("User not found in the database. Please check your name or seed the database.");
+        } else {
+          localStorage.setItem("user", JSON.stringify(data));
+          window.location.href = "dashboard.html";
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        showError("Could not connect to the backend server. Is it running?");
+      } finally {
+        // Reset loading state
+        btn.classList.remove("loading");
+        btnText.style.display = "block";
+        btnSpinner.style.display = "none";
+      }
+    }
+
+    function showError(message) {
+      const errorMsg = document.getElementById("errorMsg");
+      errorMsg.textContent = message;
+      errorMsg.style.display = "block";
+
+      // Shake animation
+      const container = document.querySelector(".login-container");
+      container.style.animation = "none";
+      container.offsetHeight; /* trigger reflow */
+      container.style.animation = "shake 0.4s cubic-bezier(.36,.07,.19,.97) both";
+    }
+
+    // Add shake animation dynamic keyframes
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Allow pressing "Enter" to submit
+    document.getElementById("name").addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        login();
+      }
+  </script>
+</body>
+
+</html>
