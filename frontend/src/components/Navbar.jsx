@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Building2, Moon, Sun, LayoutDashboard, Users, BarChart3, Gift, Briefcase, FileText, Bell, Search, ChevronDown } from 'lucide-react';
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, activeTab, setActiveTab }) => {
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -34,18 +34,23 @@ const Navbar = ({ user }) => {
   };
 
   const NavLink = ({ icon: Icon, text, active }) => (
-    <button className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium ${active ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-dark-card dark:hover:text-white'}`}>
+    <button 
+      onClick={() => setActiveTab(text)}
+      className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium ${active ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-dark-card dark:hover:text-white'}`}
+    >
       {Icon && <Icon className="w-4 h-4" />}
       <span>{text}</span>
     </button>
   );
+
+  const isAdmin = user?.role === 'Admin';
 
   return (
     <nav className="bg-white dark:bg-dark-bg shadow-sm border-b border-gray-200 dark:border-dark-border sticky top-0 z-50 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center space-x-6">
-            <div className="flex items-center cursor-pointer mr-2" onClick={() => navigate('/dashboard')}>
+            <div className="flex items-center cursor-pointer mr-2" onClick={() => navigate(isAdmin ? '/admin-dashboard' : '/employee-dashboard')}>
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center mr-2 shadow-sm">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
@@ -53,12 +58,12 @@ const Navbar = ({ user }) => {
             </div>
             
             <div className="hidden lg:flex space-x-1">
-              <NavLink text="Dashboard" active={true} />
-              <NavLink text="Employees" active={false} />
-              <NavLink text="Analytics" active={false} />
-              <NavLink text="Rewards" active={false} />
-              <NavLink text="Departments" active={false} />
-              <NavLink text="Reports" active={false} />
+              <NavLink text="Dashboard" active={activeTab === 'Dashboard'} />
+              {isAdmin && <NavLink text="Employees" active={activeTab === 'Employees'} />}
+              <NavLink text="Analytics" active={activeTab === 'Analytics'} />
+              <NavLink text="Rewards" active={activeTab === 'Rewards'} />
+              {isAdmin && <NavLink text="Departments" active={activeTab === 'Departments'} />}
+              {isAdmin && <NavLink text="Reports" active={activeTab === 'Reports'} />}
             </div>
           </div>
 

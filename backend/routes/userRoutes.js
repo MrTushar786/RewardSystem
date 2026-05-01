@@ -15,10 +15,21 @@ router.get("/", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ name: req.body.name });
+    const { identifier, password } = req.body;
+    
+    // Find user by either email or name
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { name: identifier }]
+    });
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });

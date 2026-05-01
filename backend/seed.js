@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const connectDB = require("./config/db");
 const User = require("./models/User");
@@ -14,16 +15,16 @@ const calculateReward = (attendance, performance) => {
 };
 
 const baseUsers = [
-  { name: "Ranvir Kumar", gender: "Male", age: 35, designation: "Software Engineer", experience: "10 years", company: "T-System", attendance: 95, performance: 92 },
-  { name: "Nikhil Dabale", gender: "Male", age: 34, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 88, performance: 85 },
-  { name: "Mayuri Patil", gender: "Female", age: 36, designation: "Software Engineer", experience: "8 years", company: "T-System", attendance: 92, performance: 90 },
-  { name: "Yugant Tikde", gender: "Male", age: 30, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 85, performance: 82 },
-  { name: "Hemant Patil", gender: "Male", age: 36, designation: "Software Engineer", experience: "10 years", company: "T-System", attendance: 94, performance: 91 },
-  { name: "Sahil Kumar", gender: "Male", age: 32, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 80, performance: 78 },
-  { name: "Manoj Patil", gender: "Male", age: 33, designation: "Software Engineer", experience: "7 years", company: "T-System", attendance: 87, performance: 84 },
-  { name: "Ravikant Bade", gender: "Male", age: 35, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 89, performance: 86 },
-  { name: "Narshina Kulkarni", gender: "Male", age: 37, designation: "Software Engineer", experience: "11 years", company: "T-System", attendance: 96, performance: 93 },
-  { name: "Anirudh Dyama", gender: "Male", age: 34, designation: "Software Engineer", experience: "8 years", company: "T-System", attendance: 82, performance: 80 }
+  { name: "Ranvir Kumar", email: "ranvir@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 35, designation: "Software Engineer", experience: "10 years", company: "T-System", attendance: 95, performance: 92 },
+  { name: "Nikhil Dabale", email: "nikhil@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 34, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 88, performance: 85 },
+  { name: "Mayuri Patil", email: "mayuri@tsystem.com", password: "Employee@123", role: "Employee", gender: "Female", age: 36, designation: "Software Engineer", experience: "8 years", company: "T-System", attendance: 92, performance: 90 },
+  { name: "Yugant Tikde", email: "yugant@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 30, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 85, performance: 82 },
+  { name: "Hemant Patil", email: "hemant@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 36, designation: "Software Engineer", experience: "10 years", company: "T-System", attendance: 94, performance: 91 },
+  { name: "Sahil Kumar", email: "sahil@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 32, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 80, performance: 78 },
+  { name: "Manoj Patil", email: "manoj@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 33, designation: "Software Engineer", experience: "7 years", company: "T-System", attendance: 87, performance: 84 },
+  { name: "Ravikant Bade", email: "ravikant@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 35, designation: "Software Engineer", experience: "9 years", company: "T-System", attendance: 89, performance: 86 },
+  { name: "Narshina Kulkarni", email: "narshina@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 37, designation: "Software Engineer", experience: "11 years", company: "T-System", attendance: 96, performance: 93 },
+  { name: "Anirudh Dyama", email: "anirudh@tsystem.com", password: "Employee@123", role: "Employee", gender: "Male", age: 34, designation: "Software Engineer", experience: "8 years", company: "T-System", attendance: 82, performance: 80 }
 ];
 
 const users = baseUsers.map(user => {
@@ -31,11 +32,27 @@ const users = baseUsers.map(user => {
   return { ...user, rewards, badge };
 });
 
+const adminUser = {
+  name: "Super Admin",
+  email: "Tsystem@admin.com",
+  password: "Admin@123",
+  role: "Admin",
+  gender: "N/A",
+  age: 0,
+  designation: "Super Admin",
+  experience: "N/A",
+  company: "T-System",
+  attendance: 100,
+  performance: 100,
+  rewards: 0,
+  badge: "Diamond"
+};
+
 const seedData = async () => {
   try {
     await User.deleteMany();
-    await User.insertMany(users);
-    console.log("Database Seeded with 10 Employees");
+    await User.insertMany([...users, adminUser]);
+    console.log("Database Seeded with 10 Employees and 1 Admin");
     process.exit();
   } catch (error) {
     console.error("Error seeding database:", error);

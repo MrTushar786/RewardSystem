@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Filter, ShieldAlert, ArrowUpDown } from 'lucide-react';
 
 const EmployeeDirectory = ({ users }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterTier, setFilterTier] = useState('All');
+  const navigate = useNavigate();
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -80,14 +82,18 @@ const EmployeeDirectory = ({ users }) => {
           <tbody className="divide-y divide-gray-100 dark:divide-dark-border text-gray-700 dark:text-gray-300">
             {filteredUsers.length > 0 ? (
               filteredUsers.map((u, i) => (
-                <tr key={u._id || i} className="hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                <tr 
+                  key={u._id || i} 
+                  onClick={() => navigate(`/employee-dashboard/${u._id}`)}
+                  className="hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors cursor-pointer"
+                >
                   <td className="px-5 py-3">
                     <div className="flex items-center">
                       <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 flex items-center justify-center font-bold text-xs mr-3 border border-indigo-200 dark:border-indigo-500/30">
                         {u.name.charAt(0)}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900 dark:text-white">{u.name}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors">{u.name}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{u.designation} • {u.experience}</p>
                       </div>
                     </div>
