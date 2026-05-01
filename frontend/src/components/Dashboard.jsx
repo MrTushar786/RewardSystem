@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import Leaderboard from './Leaderboard';
 import Analytics from './Analytics';
 import EmployeeDirectory from './EmployeeDirectory';
+import Departments from './Departments';
+import Reports from './Reports';
 import { Briefcase, Calendar, TrendingUp, TrendingDown, Award, Star, Cpu, AlertTriangle, Activity, Users } from 'lucide-react';
 
 const Dashboard = () => {
@@ -242,8 +244,8 @@ const Dashboard = () => {
         {activeTab === 'Employees' && <EmployeeDirectory users={allUsers} />}
         {activeTab === 'Analytics' && <Analytics users={allUsers} />}
         {activeTab === 'Rewards' && <Leaderboard users={allUsers} currentUser={user} />}
-        {activeTab === 'Departments' && <div className="p-8 bg-white dark:bg-dark-card rounded-xl text-center"><h2 className="text-2xl font-bold dark:text-white">Departments Module</h2><p className="text-gray-500 mt-2">Manage departments here.</p></div>}
-        {activeTab === 'Reports' && <div className="p-8 bg-white dark:bg-dark-card rounded-xl text-center"><h2 className="text-2xl font-bold dark:text-white">Reports Module</h2><p className="text-gray-500 mt-2">Generate and view reports here.</p></div>}
+        {activeTab === 'Departments' && <Departments users={employees} />}
+        {activeTab === 'Reports' && <Reports />}
 
       </main>
     </div>
